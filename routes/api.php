@@ -22,10 +22,12 @@ Route::post('/login', 'Auth\LoginController@login');
 
 Route::middleware('auth:api')->group(function () {
   Route::post('/logout', 'Auth\LogoutController@logout');
+  Route::get('/merchant_settings/getAuthenticatedUser', 'API\Merchant\SettingController@getAuthenticatedUser');
 
   Route::apiResources([
     'customer' => 'API\CustomerController',
     'dasher' => 'API\DasherController',
-    'merchant' => 'API\MerchantController'
+    'merchant_settings' => 'API\Merchant\SettingController',
+    'merchant_products' => 'API\Merchant\ProductController'
   ]);
 });
