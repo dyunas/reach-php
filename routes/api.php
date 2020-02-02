@@ -28,6 +28,7 @@ Route::middleware('auth:api')->group(function () {
     'customer' => 'API\CustomerController',
     'dasher' => 'API\DasherController',
     'merchant_settings' => 'API\Merchant\SettingController',
-    'merchant_products' => 'API\Merchant\ProductController'
+    'merchant_products' => 'API\Merchant\ProductController',
+    'product_categories' => 'API\Merchant\CategoryController'
   ]);
 });

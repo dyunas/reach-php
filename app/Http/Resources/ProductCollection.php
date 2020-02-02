@@ -16,6 +16,7 @@ class ProductCollection extends JsonResource
   {
     return [
       'id'            => $this->id,
+      'avatar'        => $this->avatar,
       'product_name'  => $this->product_name,
       'product_price' => $this->product_price,
       'category'      => $this->category->category,

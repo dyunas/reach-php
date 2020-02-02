@@ -10,6 +10,18 @@ use Illuminate\Support\Facades\Auth;
 
 class ProductController extends Controller
 {
+  protected function formValidator($request)
+  {
+    return $request->validate([
+      'avatar'      => 'image|mimes:jpeg,png|max:5000',
+      'productName' => 'required|string',
+      'category'    => 'required|numeric',
+      'price'       => 'required|numeric',
+      'status'      => 'required|string',
+      'details'      => 'required|string',
+    ]);
+  }
+
   /**
    * Display a listing of the resource.
    *
@@ -29,7 +41,27 @@ class ProductController extends Controller
    */
   public function store(Request $request)
   {
-    //
+    $this->formValidator($request);
+
+    $user = Auth::user();
+
+    $product = MerchantProduct::create([
+      'merchant_id'   => $user->merchant->id,
+      'category_id'   => $request->category,
+      'product_name'  => $request->productName,
+      'product_price' => $request->price,
+      'status'        => $request->status,
+      'description'   => $request->details
+    ]);
+
+    $this->storeImage($product);
+  }
+
+  public function storeImage($product)
+  {
+    $product->update([
+      'avatar' => request()->avatar->store('uploads', 'public')
+    ]);
   }
 
   /**
