@@ -64,4 +64,9 @@ class CategoryController extends Controller
   {
     //
   }
+
+  public function getCategories(Request $request)
+  {
+    return ProductCategory::where('merchant_id', $request->id)->get();
+  }
 }

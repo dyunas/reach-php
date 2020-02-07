@@ -97,4 +97,13 @@ class ProductController extends Controller
   {
     //
   }
+
+  public function getProductByCategories(Request $request)
+  {
+    return ProductCollection::collection(
+      MerchantProduct::where('merchant_id', $request->merchant_id)
+        ->where('category_id', $request->category_id)
+        ->get()
+    );
+  }
 }

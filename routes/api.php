@@ -30,6 +30,9 @@ Route::middleware('auth:api')->group(function () {
     'merchant_settings'  => 'API\Merchant\SettingController',
     'merchant_products'  => 'API\Merchant\ProductController',
     'product_categories' => 'API\Merchant\CategoryController',
-    'stores'             => 'API\Customer\StoreController'
+    'stores'             => 'API\Customer\StoreController',
   ]);
+
+  Route::get('/store_categories', 'API\Merchant\CategoryController@getCategories');
+  Route::get('/store_products_by_category', 'API\Merchant\ProductController@getProductByCategories');
 });

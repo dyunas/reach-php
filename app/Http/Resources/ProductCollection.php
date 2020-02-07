@@ -20,6 +20,7 @@ class ProductCollection extends JsonResource
       'product_name'  => $this->product_name,
       'product_price' => $this->product_price,
       'category'      => $this->category->category,
+      'description'   => $this->description,
     ];
   }
 }

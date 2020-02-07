@@ -14,7 +14,7 @@ class StoreController extends Controller
    *
    * @return \Illuminate\Http\Response
    */
-  public function index()
+  public function index(Request $request)
   {
     $stores = DB::table('merchants')
       ->selectRaw('
@@ -23,16 +23,16 @@ class StoreController extends Controller
                 (
                   (
                     acos(
-                      sin(( 14.3374682 * pi() / 180))
+                      sin(( ' . $request->custLat . ' * pi() / 180))
                       *
-                      sin(( latitude * pi() / 180)) + cos(( 14.3374682 * pi() /180 ))
+                      sin(( latitude * pi() / 180)) + cos(( ' . $request->custLat . ' * pi() /180 ))
                       *
-                      cos(( latitude * pi() / 180)) * cos((( 121.0610894 - longitude) * pi()/180)))
+                      cos(( latitude * pi() / 180)) * cos((( ' . $request->custLong . ' - longitude) * pi()/180)))
                   ) * 180/pi()
                 ) * 60 * 1.1515 * 1.609344
               , 2) as distance
             ')
-      ->havingRaw('distance <= 10')
+      ->havingRaw('distance <= 5')
       ->limit(15)
       ->get();
 
