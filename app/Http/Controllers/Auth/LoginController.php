@@ -74,14 +74,17 @@ class LoginController extends Controller
     switch ($user->account_type) {
       case 'merchant':
         $owner = $user->merchant->merchant_name;
+        $owner_id = $user->merchant->id;
         break;
 
       case 'customer':
         $owner = $user->customer->fname . ' ' . $user->customer->lname;
+        $owner_id = $user->customer->id;
         break;
 
       case 'dasher':
         $owner = $user->dasher->fname . ' ' . $user->dasher->lname;
+        $owner_id = $user->dasher->id;
         break;
 
       default:
@@ -92,6 +95,7 @@ class LoginController extends Controller
       'token'        => $token,
       'account_type' => $user->account_type,
       'owner'        => $owner,
+      'owner_id'     => $owner_id
     ]);
   }
 }

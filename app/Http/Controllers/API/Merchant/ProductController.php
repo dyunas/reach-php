@@ -18,7 +18,7 @@ class ProductController extends Controller
       'category'    => 'required|numeric',
       'price'       => 'required|numeric',
       'status'      => 'required|string',
-      'details'      => 'required|string',
+      'details'     => 'required|string',
     ]);
   }
 

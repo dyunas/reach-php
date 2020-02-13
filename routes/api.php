@@ -2,6 +2,7 @@
 
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
+use App\Events\PlacedOrder;
 
 /*
 |--------------------------------------------------------------------------
@@ -27,10 +28,12 @@ Route::middleware('auth:api')->group(function () {
   Route::apiResources([
     'customer'           => 'API\CustomerController',
     'dasher'             => 'API\DasherController',
+    'dasher_status'      => 'API\Dasher\StatusController',
     'merchant_settings'  => 'API\Merchant\SettingController',
     'merchant_products'  => 'API\Merchant\ProductController',
     'product_categories' => 'API\Merchant\CategoryController',
     'stores'             => 'API\Customer\StoreController',
+    'customer_orders'    => 'API\Customer\OrderController',
   ]);
 
   Route::get('/store_categories', 'API\Merchant\CategoryController@getCategories');

@@ -32,7 +32,7 @@ class StoreController extends Controller
                 ) * 60 * 1.1515 * 1.609344
               , 2) as distance
             ')
-      ->havingRaw('distance <= 5')
+      ->havingRaw('distance <= 20')
       ->limit(15)
       ->get();
 
@@ -58,7 +58,9 @@ class StoreController extends Controller
    */
   public function show($id)
   {
-    //
+    return Merchant::where('id', $id)
+      ->select('latitude', 'longitude')
+      ->get();
   }
 
   /**
