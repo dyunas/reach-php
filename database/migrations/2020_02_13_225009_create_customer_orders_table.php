@@ -24,6 +24,7 @@ class CreateCustomerOrdersTable extends Migration
       $table->double('merchLat');
       $table->double('merchLong');
       $table->text('location');
+      $table->text('instruction')->nullable();
       $table->decimal('subTotal', 10, 2);
       $table->decimal('total', 10, 2);
       $table->string('paymentMode', 30);

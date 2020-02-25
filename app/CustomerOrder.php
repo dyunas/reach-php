@@ -18,6 +18,30 @@ class CustomerOrder extends Model
    */
   public function items()
   {
-    return $this->hasOne(OrderItemDetails::class);
+    return $this->hasMany(OrderItemDetails::class, 'order_id', 'id');
+  }
+
+  /**
+   * Get the rider assigned to the customer order.
+   */
+  public function dasher()
+  {
+    return $this->belongsTo(Dasher::class);
+  }
+
+  /**
+   * Get the rider assigned to the customer order.
+   */
+  public function merchant()
+  {
+    return $this->belongsTo(Merchant::class);
+  }
+
+  /**
+   * Get the customer who made the order.
+   */
+  public function customer()
+  {
+    return $this->belongsTo(Customer::class);
   }
 }

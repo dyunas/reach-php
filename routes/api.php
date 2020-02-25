@@ -29,13 +29,20 @@ Route::middleware('auth:api')->group(function () {
     'customer'           => 'API\CustomerController',
     'dasher'             => 'API\DasherController',
     'dasher_status'      => 'API\Dasher\StatusController',
+    'deliveries'         => 'API\Dasher\DeliveryController',
     'merchant_settings'  => 'API\Merchant\SettingController',
     'merchant_products'  => 'API\Merchant\ProductController',
     'product_categories' => 'API\Merchant\CategoryController',
+    'orders'             => 'API\Merchant\CustomerOrderController',
+    'order_status'       => 'API\Merchant\OrderStatusController',
     'stores'             => 'API\Customer\StoreController',
     'customer_orders'    => 'API\Customer\OrderController',
   ]);
 
   Route::get('/store_categories', 'API\Merchant\CategoryController@getCategories');
   Route::get('/store_products_by_category', 'API\Merchant\ProductController@getProductByCategories');
+
+  Route::post('/orders/order_opened', 'API\Merchant\CustomerOrderController@order_opened');
+
+  Route::get('/checkPendingDelivery', 'API\Dasher\StatusController@checkPendingDelivery');
 });

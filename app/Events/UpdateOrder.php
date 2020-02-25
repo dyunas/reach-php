@@ -10,7 +10,7 @@ use Illuminate\Contracts\Broadcasting\ShouldBroadcast;
 use Illuminate\Foundation\Events\Dispatchable;
 use Illuminate\Queue\SerializesModels;
 
-class PlacedOrder implements ShouldBroadcast
+class UpdateOrder implements ShouldBroadcast
 {
   use Dispatchable, InteractsWithSockets, SerializesModels;
 
@@ -35,8 +35,7 @@ class PlacedOrder implements ShouldBroadcast
   {
     // return new Channel('order-tracker');
     return [
-      'rider-tracker-' . $this->notify->rider_id,
-      'merchant-tracker-' . $this->notify->merchant_id
+      'status-order-tracker-' . $this->notify->customer_id
     ];
   }
 }

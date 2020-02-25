@@ -1,13 +1,14 @@
 <?php
 
-namespace App\Http\Controllers\API\Merchant;
+namespace App\Http\Controllers\API\Dasher;
 
-use App\ProductCategory;
+use App\CustomerOrder;
 use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
 use Illuminate\Support\Facades\Auth;
+use App\Http\Resources\OrderCollection as OrderCollection;
 
-class CategoryController extends Controller
+class DeliveryController extends Controller
 {
   /**
    * Display a listing of the resource.
@@ -16,8 +17,7 @@ class CategoryController extends Controller
    */
   public function index()
   {
-    $user = Auth::user();
-    return ProductCategory::where('merchant_id', $user->merchant->id)->get();
+    return CustomerOrder::where('dasher_id', Auth::user()->dasher->id)->get();
   }
 
   /**
@@ -28,10 +28,7 @@ class CategoryController extends Controller
    */
   public function store(Request $request)
   {
-    return ProductCategory::create([
-      'category'    => $request->category,
-      'merchant_id' => Auth::user()->merchant->id
-    ]);
+    //
   }
 
   /**
@@ -42,7 +39,11 @@ class CategoryController extends Controller
    */
   public function show($id)
   {
-    //
+    return OrderCollection::collection(
+      CustomerOrder::where('dasher_id', Auth::user()->dasher->id)
+        ->where('id', $id)
+        ->get()
+    )->toJson();
   }
 
   /**
@@ -66,10 +67,5 @@ class CategoryController extends Controller
   public function destroy($id)
   {
     //
-  }
-
-  public function getCategories(Request $request)
-  {
-    return ProductCategory::where('merchant_id', $request->id)->get();
   }
 }

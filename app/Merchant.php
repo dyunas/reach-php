@@ -27,4 +27,12 @@ class Merchant extends Model
   {
     return $this->hasOne(User::class);
   }
+
+  /**
+   * Get the order for each merchant.
+   */
+  public function orders()
+  {
+    return $this->hasMany(User::class);
+  }
 }

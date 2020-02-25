@@ -4,7 +4,7 @@ use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\Schema;
 
-class AlterMerchantProductsTableAddColumnStatus extends Migration
+class CreateOrderStatusesTable extends Migration
 {
   /**
    * Run the migrations.
@@ -13,8 +13,10 @@ class AlterMerchantProductsTableAddColumnStatus extends Migration
    */
   public function up()
   {
-    Schema::table('merchant_products', function (Blueprint $table) {
-      $table->string('status', 20)->after('category_id')->nullable();
+    Schema::create('order_statuses', function (Blueprint $table) {
+      $table->bigIncrements('id');
+      $table->string('status', 50);
+      $table->string('used_in', 20);
     });
   }
 
@@ -25,8 +27,6 @@ class AlterMerchantProductsTableAddColumnStatus extends Migration
    */
   public function down()
   {
-    Schema::table('merchant_products', function (Blueprint $table) {
-      $table->dropColumn('status');
-    });
+    Schema::dropIfExists('order_statuses');
   }
 }

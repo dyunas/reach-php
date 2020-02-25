@@ -18,7 +18,7 @@ class OrderItemDetails extends Model
    */
   public function order()
   {
-    return $this->hasOne(CustomerOrder::class);
+    return $this->belongsTo(CustomerOrder::class, 'order_id');
   }
 
   /**

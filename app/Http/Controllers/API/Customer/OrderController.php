@@ -2,13 +2,17 @@
 
 namespace App\Http\Controllers\API\Customer;
 
-use App\Http\Controllers\Controller;
-use App\CustomerOrder;
+use App\Dasher;
 use App\DasherStatus;
-use App\Events\PlacedOrder;
+use App\CustomerOrder;
 use App\OrderItemDetails;
+use App\Events\PlacedOrder;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
+use App\Http\Controllers\Controller;
+use App\Http\Resources\OrderCollection as OrderCollection;
+use App\OrderStatus;
+use Illuminate\Support\Facades\Auth;
 
 class OrderController extends Controller
 {
@@ -19,7 +23,7 @@ class OrderController extends Controller
    */
   public function index()
   {
-    //
+    return CustomerOrder::where('customer_id', Auth::user()->customer->id)->get();
   }
 
   /**
@@ -30,9 +34,6 @@ class OrderController extends Controller
    */
   public function store(Request $request)
   {
-    $order_details = $this->store_order($request);
-    $order_item = $this->store_order_items($request->cart, $order_details->id);
-
     $rider = DB::select(
       "SELECT *, (SELECT round(
           (
@@ -51,12 +52,18 @@ class OrderController extends Controller
         LIMIT 1) as distance
         FROM dasher_statuses
         WHERE unix_timestamp() - unix_timestamp(updated_at) < 5
+        AND dasher_status = 1
         ORDER BY distance"
     );
 
+    DasherStatus::where('dasher_id', $rider[0]->id)->update(['dasher_status' => 0]);
+
+    $order_details = $this->store_order($request, $rider[0]->id);
+    $order_item = $this->store_order_items($request->cart, $order_details->id);
 
     $notify = new \stdclass;
 
+    $notify->merchant_id = $order_details->merchant_id;
     $notify->rider_id = $rider[0]->id;
     $notify->type = 'new order';
     $notify->message = 'Order Ready! Click here';
@@ -64,10 +71,10 @@ class OrderController extends Controller
 
     event(new PlacedOrder($notify));
 
-    return response()->json(['header' => 'Order Placed!', 'message' => 'Your order has been placed!'], 201);
+    return response()->json(['header' => 'Order Placed!', 'message' => 'Your order has been placed!', 'order_id' => $order_details->id], 201);
   }
 
-  public function store_order($request)
+  public function store_order($request, $rider_id)
   {
     $now = date('Ymd');
     $uniq = substr(uniqid(mt_rand(), true), 0, 5);
@@ -76,12 +83,14 @@ class OrderController extends Controller
       'order_id'    => 'CR-' . $now . '-' . $uniq,
       'customer_id' => $request->customerID,
       'merchant_id' => $request->merchantID,
+      'dasher_id'   => $rider_id,
       'status'      => 'Order placed',
       'custLat'     => $request->custLat,
       'custLong'    => $request->custLong,
       'merchLat'    => $request->merchLat,
       'merchLong'   => $request->merchLong,
       'location'    => $request->location,
+      'instruction' => $request->instruction,
       'subTotal'    => $request->subTotal,
       'total'       => $request->total,
       'paymentMode' => $request->paymentMode
@@ -113,7 +122,11 @@ class OrderController extends Controller
    */
   public function show($id)
   {
-    //
+    return OrderCollection::collection(
+      CustomerOrder::where('customer_id', Auth::user()->customer->id)
+        ->where('id', $id)
+        ->get()
+    )->toJson();
   }
 
   /**
@@ -125,7 +138,21 @@ class OrderController extends Controller
    */
   public function update(Request $request, $id)
   {
-    //
+    return $customer = CustomerOrder::where('id', $id)
+      ->update([
+        'status' => $request->data['status']
+      ]);
+
+    // $notify = new \stdclass;
+
+    // $notify->customer = $customer[0]->id;
+    // $notify->type = 'new order';
+    // $notify->message = 'Order Ready! Click here';
+    // $notify->path = '/dasher/my_deliveries/' . $order_details->id;
+
+    // event(new PlacedOrder($notify));
+
+    // return response()->json(['message' => 'Order Status Updated!'], 200);
   }
 
   /**

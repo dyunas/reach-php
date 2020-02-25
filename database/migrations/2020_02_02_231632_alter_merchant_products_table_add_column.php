@@ -14,7 +14,7 @@ class AlterMerchantProductsTableAddColumn extends Migration
   public function up()
   {
     Schema::table('merchant_products', function (Blueprint $table) {
-      $table->string('avatar')->after('merchant_id');
+      $table->string('avatar')->after('merchant_id')->nullable();
     });
   }
 

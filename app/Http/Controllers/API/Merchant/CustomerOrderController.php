@@ -2,12 +2,19 @@
 
 namespace App\Http\Controllers\API\Merchant;
 
-use App\ProductCategory;
+use App\Dasher;
+use App\DasherStatus;
+use App\CustomerOrder;
+use App\OrderItemDetails;
+use App\Events\PlacedOrder;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\DB;
 use App\Http\Controllers\Controller;
+use App\Http\Resources\OrderCollection as OrderCollection;
+use App\OrderStatus;
 use Illuminate\Support\Facades\Auth;
 
-class CategoryController extends Controller
+class CustomerOrderController extends Controller
 {
   /**
    * Display a listing of the resource.
@@ -16,8 +23,13 @@ class CategoryController extends Controller
    */
   public function index()
   {
-    $user = Auth::user();
-    return ProductCategory::where('merchant_id', $user->merchant->id)->get();
+    return CustomerOrder::where('dasher_id', Auth::user()->merchant->id)->get();
+  }
+
+  public function order_opened(Request $request)
+  {
+    return CustomerOrder::where('id', $request->data['id'])
+      ->update(['opened' => 0]);
   }
 
   /**
@@ -28,10 +40,7 @@ class CategoryController extends Controller
    */
   public function store(Request $request)
   {
-    return ProductCategory::create([
-      'category'    => $request->category,
-      'merchant_id' => Auth::user()->merchant->id
-    ]);
+    //
   }
 
   /**
@@ -42,7 +51,11 @@ class CategoryController extends Controller
    */
   public function show($id)
   {
-    //
+    return OrderCollection::collection(
+      CustomerOrder::where('merchant_id', Auth::user()->merchant->id)
+        ->where('id', $id)
+        ->get()
+    )->toJson();
   }
 
   /**
@@ -54,7 +67,12 @@ class CategoryController extends Controller
    */
   public function update(Request $request, $id)
   {
-    //
+    CustomerOrder::where('id', $id)
+      ->update([
+        'status' => $request->data['status']
+      ]);
+
+    return response()->json(['message' => 'Order Status Updated!'], 200);
   }
 
   /**
@@ -66,10 +84,5 @@ class CategoryController extends Controller
   public function destroy($id)
   {
     //
-  }
-
-  public function getCategories(Request $request)
-  {
-    return ProductCategory::where('merchant_id', $request->id)->get();
   }
 }

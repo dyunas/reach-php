@@ -14,8 +14,8 @@ class AlterMerchantsTableAddColumns extends Migration
   public function up()
   {
     Schema::table('merchants', function (Blueprint $table) {
-      $table->string('photo')->after('user_id');
-      $table->text('description')->after('location');
+      $table->string('photo')->after('user_id')->nullable();
+      $table->text('description')->after('location')->nullable();
     });
   }
 

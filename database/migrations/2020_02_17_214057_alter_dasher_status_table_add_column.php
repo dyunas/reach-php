@@ -4,7 +4,7 @@ use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\Schema;
 
-class AlterMerchantProductsTableAddColumnStatus extends Migration
+class AlterDasherStatusTableAddColumn extends Migration
 {
   /**
    * Run the migrations.
@@ -13,8 +13,8 @@ class AlterMerchantProductsTableAddColumnStatus extends Migration
    */
   public function up()
   {
-    Schema::table('merchant_products', function (Blueprint $table) {
-      $table->string('status', 20)->after('category_id')->nullable();
+    Schema::table('dasher_statuses', function (Blueprint $table) {
+      $table->boolean('dasher_status')->after('dasher_id')->default(1);
     });
   }
 
@@ -25,8 +25,8 @@ class AlterMerchantProductsTableAddColumnStatus extends Migration
    */
   public function down()
   {
-    Schema::table('merchant_products', function (Blueprint $table) {
-      $table->dropColumn('status');
+    Schema::table('dasher_statuses', function (Blueprint $table) {
+      $table->dropColumn('dasher_status');
     });
   }
 }

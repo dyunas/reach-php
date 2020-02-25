@@ -27,4 +27,12 @@ class Customer extends Model
   {
     return $this->hasOne(User::class);
   }
+
+  /**
+   * Get the orders of the customer.
+   */
+  public function orders()
+  {
+    return $this->hasMany(CustomerOrder::class);
+  }
 }

@@ -27,4 +27,12 @@ class Dasher extends Model
   {
     return $this->hasOne(User::class);
   }
+
+  /**
+   * Get the orders assigned to the dasher.
+   */
+  public function orders()
+  {
+    return $this->belongsToMany(CustomerOrder::class);
+  }
 }

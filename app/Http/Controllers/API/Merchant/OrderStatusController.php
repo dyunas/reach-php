@@ -2,12 +2,12 @@
 
 namespace App\Http\Controllers\API\Merchant;
 
-use App\ProductCategory;
+use App\OrderStatus;
 use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
 use Illuminate\Support\Facades\Auth;
 
-class CategoryController extends Controller
+class OrderStatusController extends Controller
 {
   /**
    * Display a listing of the resource.
@@ -16,8 +16,9 @@ class CategoryController extends Controller
    */
   public function index()
   {
-    $user = Auth::user();
-    return ProductCategory::where('merchant_id', $user->merchant->id)->get();
+    return OrderStatus::where('used_in', Auth::user()->account_type)
+      ->select('status')
+      ->get();
   }
 
   /**
@@ -28,10 +29,7 @@ class CategoryController extends Controller
    */
   public function store(Request $request)
   {
-    return ProductCategory::create([
-      'category'    => $request->category,
-      'merchant_id' => Auth::user()->merchant->id
-    ]);
+    //
   }
 
   /**
@@ -66,10 +64,5 @@ class CategoryController extends Controller
   public function destroy($id)
   {
     //
-  }
-
-  public function getCategories(Request $request)
-  {
-    return ProductCategory::where('merchant_id', $request->id)->get();
   }
 }
