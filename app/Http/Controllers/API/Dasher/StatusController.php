@@ -78,15 +78,13 @@ class StatusController extends Controller
   {
     $dasher = DasherStatus::where('dasher_id', Auth::user()->dasher->id)
       ->where('dasher_status', 0)
-      ->first();
+      ->get();
 
-    if (!empty((array) $dasher)) {
-      return CustomerOrder::where('dasher_id', $dasher->id)
-        ->where('status', '!=', 'delivered')
+    if (count($dasher) > 0) {
+      return CustomerOrder::where('dasher_id', $dasher[0]->id)
+        ->where('status', '!=', 'Delivered')
         ->select('id', 'order_id')
         ->get();
-    } else {
-      return response()->json('false', 200);
     }
   }
 }

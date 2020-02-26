@@ -3,6 +3,8 @@
 namespace App\Http\Controllers\API\Dasher;
 
 use App\CustomerOrder;
+use App\DasherStatus;
+use App\Events\UpdateOrder;
 use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
 use Illuminate\Support\Facades\Auth;
@@ -17,7 +19,7 @@ class DeliveryController extends Controller
    */
   public function index()
   {
-    return CustomerOrder::where('dasher_id', Auth::user()->dasher->id)->get();
+    return CustomerOrder::where('dasher_id', Auth::user()->dasher->id)->orderBy('id', 'desc')->get();
   }
 
   /**
@@ -55,7 +57,30 @@ class DeliveryController extends Controller
    */
   public function update(Request $request, $id)
   {
-    //
+    CustomerOrder::where('id', $id)
+      ->update([
+        'status' => $request->data['status']
+      ]);
+
+    if ($request->data['status'] === 'Delivered') {
+      DasherStatus::where('dasher_id', Auth::user()->dasher->id)
+        ->update(['dasher_status' => 1]);
+    }
+
+    $customer = CustomerOrder::find($id);
+
+    $notify = new \stdclass;
+
+    $notify->customer = $customer->customer_id;
+    $notify->merchant = $customer->merchant_id;
+    $notify->header = $customer->order_id;
+    $notify->message = $customer->status;
+    $notify->date = $customer->updated_at;
+    $notify->path = 'orders/' . $customer->id;
+
+    event(new UpdateOrder($notify));
+
+    return response()->json(['message' => 'Order Status Updated!'], 200);
   }
 
   /**

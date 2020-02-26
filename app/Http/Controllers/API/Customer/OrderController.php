@@ -23,7 +23,7 @@ class OrderController extends Controller
    */
   public function index()
   {
-    return CustomerOrder::where('customer_id', Auth::user()->customer->id)->get();
+    return CustomerOrder::where('customer_id', Auth::user()->customer->id)->orderBy('id', 'desc')->get();
   }
 
   /**
@@ -56,6 +56,10 @@ class OrderController extends Controller
         ORDER BY distance"
     );
 
+    if (empty($rider)) {
+      return response()->json(['header' => 'Oh no!', 'message' => 'There is no available rider at this moment. Pleast try again later!', 'ok' => false], 201);
+    }
+
     DasherStatus::where('dasher_id', $rider[0]->id)->update(['dasher_status' => 0]);
 
     $order_details = $this->store_order($request, $rider[0]->id);
@@ -67,11 +71,11 @@ class OrderController extends Controller
     $notify->rider_id = $rider[0]->id;
     $notify->type = 'new order';
     $notify->message = 'Order Ready! Click here';
-    $notify->path = '/dasher/my_deliveries/' . $order_details->id;
+    $notify->path = '/dasher/deliveries/' . $order_details->id;
 
     event(new PlacedOrder($notify));
 
-    return response()->json(['header' => 'Order Placed!', 'message' => 'Your order has been placed!', 'order_id' => $order_details->id], 201);
+    return response()->json(['header' => 'Order Placed!', 'message' => 'Your order has been placed!', 'order_id' => $order_details->id, 'ok' => true], 201);
   }
 
   public function store_order($request, $rider_id)
@@ -93,7 +97,8 @@ class OrderController extends Controller
       'instruction' => $request->instruction,
       'subTotal'    => $request->subTotal,
       'total'       => $request->total,
-      'paymentMode' => $request->paymentMode
+      'paymentMode' => $request->paymentMode,
+      'opened'      => 1
     ]);
   }
 
@@ -138,21 +143,12 @@ class OrderController extends Controller
    */
   public function update(Request $request, $id)
   {
-    return $customer = CustomerOrder::where('id', $id)
+    CustomerOrder::where('id', $id)
       ->update([
         'status' => $request->data['status']
       ]);
 
-    // $notify = new \stdclass;
-
-    // $notify->customer = $customer[0]->id;
-    // $notify->type = 'new order';
-    // $notify->message = 'Order Ready! Click here';
-    // $notify->path = '/dasher/my_deliveries/' . $order_details->id;
-
-    // event(new PlacedOrder($notify));
-
-    // return response()->json(['message' => 'Order Status Updated!'], 200);
+    return response()->json(['message' => 'Order Status Updated!'], 200);
   }
 
   /**

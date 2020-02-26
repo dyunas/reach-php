@@ -2,17 +2,13 @@
 
 namespace App\Http\Controllers\API\Merchant;
 
-use App\Dasher;
-use App\DasherStatus;
 use App\CustomerOrder;
-use App\OrderItemDetails;
-use App\Events\PlacedOrder;
+use App\Events\UpdateOrder;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 use App\Http\Controllers\Controller;
-use App\Http\Resources\OrderCollection as OrderCollection;
-use App\OrderStatus;
 use Illuminate\Support\Facades\Auth;
+use App\Http\Resources\OrderCollection as OrderCollection;
 
 class CustomerOrderController extends Controller
 {
@@ -23,7 +19,7 @@ class CustomerOrderController extends Controller
    */
   public function index()
   {
-    return CustomerOrder::where('dasher_id', Auth::user()->merchant->id)->get();
+    return CustomerOrder::where('dasher_id', Auth::user()->merchant->id)->orderBy('id', 'desc')->get();
   }
 
   public function order_opened(Request $request)
@@ -71,6 +67,19 @@ class CustomerOrderController extends Controller
       ->update([
         'status' => $request->data['status']
       ]);
+
+    $customer = CustomerOrder::find($id);
+
+    $notify = new \stdclass;
+
+    $notify->customer = $customer->customer_id;
+    $notify->rider = $customer->dasher_id;
+    $notify->header = $customer->order_id;
+    $notify->message = $customer->status;
+    $notify->date = $customer->updated_at;
+    $notify->path = 'orders/' . $customer->id;
+
+    event(new UpdateOrder($notify));
 
     return response()->json(['message' => 'Order Status Updated!'], 200);
   }
