@@ -24,7 +24,7 @@ class CustomerOrderController extends Controller
 
   public function order_opened(Request $request)
   {
-    return CustomerOrder::where('id', $request->data['id'])
+    return CustomerOrder::where('id', $request->id)
       ->update(['opened' => 0]);
   }
 
@@ -72,6 +72,8 @@ class CustomerOrderController extends Controller
 
     $notify = new \stdclass;
 
+    $notify->from = 'merchant';
+    $notify->customer = $customer->customer_id;
     $notify->customer = $customer->customer_id;
     $notify->rider = $customer->dasher_id;
     $notify->header = $customer->order_id;

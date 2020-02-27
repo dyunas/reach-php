@@ -34,16 +34,16 @@ class UpdateOrder implements ShouldBroadcast
   public function broadcastOn()
   {
     // return new Channel('order-tracker');
-    if ($this->notify->merchant) {
+    if ($this->notify->from === 'dasher') {
       return [
         'status-order-tracker-' . $this->notify->customer,
         'merchant-order-tracker-' . $this->notify->merchant
       ];
-    } else {
-      return [
-        'status-order-tracker-' . $this->notify->customer,
-        'rider-order-tracker-' . $this->notify->rider
-      ];
     }
+
+    return [
+      'status-order-tracker-' . $this->notify->customer,
+      'rider-order-tracker-' . $this->notify->rider
+    ];
   }
 }

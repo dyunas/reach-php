@@ -71,12 +71,13 @@ class DeliveryController extends Controller
 
     $notify = new \stdclass;
 
+    $notify->from = 'dasher';
     $notify->customer = $customer->customer_id;
     $notify->merchant = $customer->merchant_id;
     $notify->header = $customer->order_id;
     $notify->message = $customer->status;
     $notify->date = $customer->updated_at;
-    $notify->path = 'orders/' . $customer->id;
+    $notify->path = $customer->id;
 
     event(new UpdateOrder($notify));
 

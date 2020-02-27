@@ -71,7 +71,7 @@ class OrderController extends Controller
     $notify->rider_id = $rider[0]->id;
     $notify->type = 'new order';
     $notify->message = 'Order Ready! Click here';
-    $notify->path = '/dasher/deliveries/' . $order_details->id;
+    $notify->path = $order_details->id;
 
     event(new PlacedOrder($notify));
 

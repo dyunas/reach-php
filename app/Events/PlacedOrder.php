@@ -36,7 +36,7 @@ class PlacedOrder implements ShouldBroadcast
     // return new Channel('order-tracker');
     return [
       'rider-tracker-' . $this->notify->rider_id,
-      'merchant-tracker-' . $this->notify->merchant_id
+      'merchant-tracker' . $this->notify->merchant_id
     ];
   }
 }
