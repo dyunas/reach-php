@@ -35,4 +35,12 @@ class Dasher extends Model
   {
     return $this->belongsToMany(CustomerOrder::class);
   }
+
+  /**
+   * Associate the rating with each dasher.
+   */
+  public function ratings()
+  {
+    return $this->hasMany(DasherRating::class);
+  }
 }

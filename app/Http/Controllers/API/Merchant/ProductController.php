@@ -55,6 +55,8 @@ class ProductController extends Controller
     ]);
 
     $this->storeImage($product);
+
+    return response()->json(['message' => 'Product successfully added!'], 201);
   }
 
   public function storeImage($product)

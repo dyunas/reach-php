@@ -39,6 +39,27 @@ class StoreController extends Controller
     return $stores;
   }
 
+  public function getStoreDistanceInKM($id, Request $request)
+  {
+    return DB::table('merchants')
+      ->selectRaw('
+              round(
+                (
+                  (
+                    acos(
+                      sin(( ' . $request->lat . ' * pi() / 180))
+                      *
+                      sin(( latitude * pi() / 180)) + cos(( ' . $request->lat . ' * pi() /180 ))
+                      *
+                      cos(( latitude * pi() / 180)) * cos((( ' . $request->long . ' - longitude) * pi()/180)))
+                  ) * 180/pi()
+                ) * 60 * 1.1515 * 1.609344
+              , 2) as distance
+            ')
+      ->whereRaw('id = ' . $id)
+      ->get();
+  }
+
   /**
    * Store a newly created resource in storage.
    *

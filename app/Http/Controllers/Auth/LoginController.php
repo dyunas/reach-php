@@ -72,6 +72,10 @@ class LoginController extends Controller
     $token = $this->generateAccessToken($user);
 
     switch ($user->account_type) {
+      case 'admin':
+        $owner = 'admin';
+        $owner_id = $user->id;
+        break;
       case 'merchant':
         $owner = $user->merchant->merchant_name;
         $owner_id = $user->merchant->id;

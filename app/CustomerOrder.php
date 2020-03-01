@@ -44,4 +44,12 @@ class CustomerOrder extends Model
   {
     return $this->belongsTo(Customer::class);
   }
+
+  /**
+   * Associate the rating with the customer order.
+   */
+  public function rating()
+  {
+    return $this->hasOne(DasherRating::class);
+  }
 }

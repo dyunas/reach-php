@@ -26,21 +26,36 @@ Route::middleware('auth:api')->group(function () {
   Route::get('/merchant_settings/getAuthenticatedUser', 'API\Merchant\SettingController@getAuthenticatedUser');
 
   Route::apiResources([
-    'customer'           => 'API\CustomerController',
+    'admin/customer'     => 'API\Admin\CustomerController',
+    'admin/merchant'     => 'API\Admin\MerchantController',
+    'admin/dasher'       => 'API\Admin\DasherController',
+
     'dasher'             => 'API\DasherController',
     'dasher_status'      => 'API\Dasher\StatusController',
     'deliveries'         => 'API\Dasher\DeliveryController',
+    'ratings'            => 'API\Dasher\RatingController',
+
     'merchant_settings'  => 'API\Merchant\SettingController',
     'merchant_products'  => 'API\Merchant\ProductController',
     'product_categories' => 'API\Merchant\CategoryController',
     'orders'             => 'API\Merchant\CustomerOrderController',
     'order_status'       => 'API\Merchant\OrderStatusController',
+
+    'customer'           => 'API\CustomerController',
     'stores'             => 'API\Customer\StoreController',
     'customer_orders'    => 'API\Customer\OrderController',
   ]);
 
+  Route::get('/admin/getCustomerCount', 'API\Admin\CustomerController@customer_count');
+  Route::get('/admin/getMerchantCount', 'API\Admin\MerchantController@merchant_count');
+  Route::get('/admin/getDasherCount', 'API\Admin\DasherController@dasher_count');
+  Route::get('/admin/transactions/getAnnualTransactionsCount', 'API\Admin\TransactionController@getAnnualTransactionsCount');
+  Route::get('/admin/transactions/getMonthlyTransactionsCount', 'API\Admin\TransactionController@getMonthlyTransactionsCount');
+
   Route::get('/store_categories', 'API\Merchant\CategoryController@getCategories');
   Route::get('/store_products_by_category', 'API\Merchant\ProductController@getProductByCategories');
+
+  Route::get('/getStoreDistanceInKM/{id}', 'API\Customer\StoreController@getStoreDistanceInKM');
 
   Route::post('/orders/order_opened', 'API\Merchant\CustomerOrderController@order_opened');
 

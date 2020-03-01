@@ -84,21 +84,23 @@ class OrderController extends Controller
     $uniq = substr(uniqid(mt_rand(), true), 0, 5);
 
     return CustomerOrder::create([
-      'order_id'    => 'CR-' . $now . '-' . $uniq,
-      'customer_id' => $request->customerID,
-      'merchant_id' => $request->merchantID,
-      'dasher_id'   => $rider_id,
-      'status'      => 'Order placed',
-      'custLat'     => $request->custLat,
-      'custLong'    => $request->custLong,
-      'merchLat'    => $request->merchLat,
-      'merchLong'   => $request->merchLong,
-      'location'    => $request->location,
-      'instruction' => $request->instruction,
-      'subTotal'    => $request->subTotal,
-      'total'       => $request->total,
-      'paymentMode' => $request->paymentMode,
-      'opened'      => 1
+      'order_id'     => 'CR-' . $now . '-' . $uniq,
+      'customer_id'  => $request->customerID,
+      'merchant_id'  => $request->merchantID,
+      'dasher_id'    => $rider_id,
+      'status'       => 'Order placed',
+      'custLat'      => $request->custLat,
+      'custLong'     => $request->custLong,
+      'merchLat'     => $request->merchLat,
+      'merchLong'    => $request->merchLong,
+      'location'     => $request->location,
+      'instruction'  => $request->instruction,
+      'subTotal'     => $request->subTotal,
+      'distance'     => $request->distance,
+      'delivery_fee' => $request->deliveryFee,
+      'total'        => $request->total,
+      'paymentMode'  => $request->paymentMode,
+      'opened'       => 1
     ]);
   }
 

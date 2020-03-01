@@ -19,7 +19,7 @@ class CustomerOrderController extends Controller
    */
   public function index()
   {
-    return CustomerOrder::where('dasher_id', Auth::user()->merchant->id)->orderBy('id', 'desc')->get();
+    return CustomerOrder::where('merchant_id', Auth::user()->merchant->id)->orderBy('id', 'desc')->get();
   }
 
   public function order_opened(Request $request)

@@ -35,4 +35,12 @@ class Customer extends Model
   {
     return $this->hasMany(CustomerOrder::class);
   }
+
+  /**
+   * Associate the customer with the dasher rating.
+   */
+  public function rating()
+  {
+    return $this->hasMany(DasherRating::class);
+  }
 }
