@@ -29,6 +29,8 @@ class OrderCollection extends JsonResource
       'items'         => $this->items,
       'instruction'   => $this->instruction,
       'subTotal'      => $this->subTotal,
+      'distance'      => $this->distance,
+      'deliveryFee'   => $this->delivery_fee,
       'total'         => $this->total,
       'paymentMode'   => $this->paymentMode,
       'created_at'    => $this->created_at,

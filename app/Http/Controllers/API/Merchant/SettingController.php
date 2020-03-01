@@ -23,6 +23,14 @@ class SettingController extends Controller
     return $user;
   }
 
+  public function changeBanner(Request $request)
+  {
+    Merchant::where('user_id', Auth::user()->id)
+      ->update(['photo' => $request->banner->store('uploads', 'public')]);
+
+    return Merchant::where('user_id', Auth::user()->id)->select('photo')->get();
+  }
+
   /**
    * Display a listing of the resource.
    *

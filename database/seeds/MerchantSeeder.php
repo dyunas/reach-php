@@ -15,7 +15,7 @@ class MerchantSeeder extends Seeder
   {
     DB::table('merchants')->delete();
 
-    Merchant::create(
+    $merchants = [
       [
         'user_id'        => 2,
         'merchant_name'  => 'Jollibee Pacita',
@@ -38,6 +38,10 @@ class MerchantSeeder extends Seeder
         'opening'        => '09:00',
         'closing'        => '20:00'
       ]
-    );
+    ];
+
+    foreach ($merchants as $merchant) {
+      Merchant::create($merchant);
+    }
   }
 }

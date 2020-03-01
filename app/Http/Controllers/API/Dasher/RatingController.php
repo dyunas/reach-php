@@ -47,7 +47,7 @@ class RatingController extends Controller
   {
     $result = DasherRating::where('order_id', $id)->get();
 
-    if (empty($result)) {
+    if (count($result) == 0) {
       return response()->json([], 400);
     }
 

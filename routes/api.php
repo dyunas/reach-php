@@ -57,6 +57,8 @@ Route::middleware('auth:api')->group(function () {
 
   Route::get('/getStoreDistanceInKM/{id}', 'API\Customer\StoreController@getStoreDistanceInKM');
 
+  Route::post('/merchant_settings/changeBanner', 'API\Merchant\SettingController@changeBanner');
+
   Route::post('/orders/order_opened', 'API\Merchant\CustomerOrderController@order_opened');
 
   Route::get('/checkPendingDelivery', 'API\Dasher\StatusController@checkPendingDelivery');

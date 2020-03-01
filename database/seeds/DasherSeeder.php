@@ -15,7 +15,7 @@ class DasherSeeder extends Seeder
   {
     DB::table('dashers')->delete();
 
-    Dasher::create(
+    $dashers = [
       [
         'user_id'        => 3,
         'fname'          => 'Gerick',
@@ -24,7 +24,20 @@ class DasherSeeder extends Seeder
         'contact_number' => '9001234567',
         'vehicle_rank'   => 'rider',
         'account_status' => 'active'
+      ],
+      [
+        'user_id'        => 6,
+        'fname'          => 'Argie',
+        'lname'          => 'Cabrales',
+        'mi'             => '',
+        'contact_number' => '9989876543',
+        'vehicle_rank'   => 'rider',
+        'account_status' => 'active'
       ]
-    );
+    ];
+
+    foreach ($dashers as $dasher) {
+      Dasher::create($dashers);
+    }
   }
 }
