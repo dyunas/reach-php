@@ -54,6 +54,7 @@ Route::middleware('auth:api')->group(function () {
 
   Route::get('/store_categories', 'API\Merchant\CategoryController@getCategories');
   Route::get('/store_products_by_category', 'API\Merchant\ProductController@getProductByCategories');
+  Route::get('/store_getBanner', 'API\Merchant\ProductController@getBanner');
 
   Route::get('/getStoreDistanceInKM/{id}', 'API\Customer\StoreController@getStoreDistanceInKM');
 

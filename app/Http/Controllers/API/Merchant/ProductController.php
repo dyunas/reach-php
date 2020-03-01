@@ -5,6 +5,7 @@ namespace App\Http\Controllers\API\Merchant;
 use App\MerchantProduct;
 use App\Http\Resources\ProductCollection as ProductCollection;
 use App\Http\Controllers\Controller;
+use App\Merchant;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 
@@ -64,6 +65,11 @@ class ProductController extends Controller
     $product->update([
       'avatar' => request()->avatar->store('uploads', 'public')
     ]);
+  }
+
+  public function getBanner(Request $request)
+  {
+    return Merchant::where('id', $request->merchant_id)->select('photo')->get();
   }
 
   /**
