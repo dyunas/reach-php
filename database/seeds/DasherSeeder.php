@@ -37,7 +37,7 @@ class DasherSeeder extends Seeder
     ];
 
     foreach ($dashers as $dasher) {
-      Dasher::create($dashers);
+      Dasher::create($dasher);
     }
   }
 }
