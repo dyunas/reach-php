@@ -29,6 +29,7 @@ Route::middleware('auth:api')->group(function () {
     'admin/customer'     => 'API\Admin\CustomerController',
     'admin/merchant'     => 'API\Admin\MerchantController',
     'admin/dasher'       => 'API\Admin\DasherController',
+    // 'admin/revenue'      => 'API\Admin\RevenueController',
 
     'dasher'             => 'API\DasherController',
     'dasher_status'      => 'API\Dasher\StatusController',
@@ -49,8 +50,13 @@ Route::middleware('auth:api')->group(function () {
   Route::get('/admin/getCustomerCount', 'API\Admin\CustomerController@customer_count');
   Route::get('/admin/getMerchantCount', 'API\Admin\MerchantController@merchant_count');
   Route::get('/admin/getDasherCount', 'API\Admin\DasherController@dasher_count');
+
   Route::get('/admin/transactions/getAnnualTransactionsCount', 'API\Admin\TransactionController@getAnnualTransactionsCount');
   Route::get('/admin/transactions/getMonthlyTransactionsCount', 'API\Admin\TransactionController@getMonthlyTransactionsCount');
+  Route::get('/admin/transactions/getDateRangeTransactions', 'API\Admin\TransactionController@getDateRangeTransactions');
+
+  Route::get('/admin/revenue/getAnnualRevenue', 'API\Admin\RevenueController@getAnnualRevenue');
+  Route::get('/admin/revenue/getMonthlyRevenue', 'API\Admin\RevenueController@getMonthlyRevenue');
 
   Route::get('/store_categories', 'API\Merchant\CategoryController@getCategories');
   Route::get('/store_products_by_category', 'API\Merchant\ProductController@getProductByCategories');

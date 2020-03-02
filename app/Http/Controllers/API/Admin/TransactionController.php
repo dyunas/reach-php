@@ -28,4 +28,19 @@ class TransactionController extends Controller
       1 DAY) AND LAST_DAY(CURDATE())
     ');
   }
+
+  public function getDateRangeTransactions(Request $request)
+  {
+    return DB::select('
+      SELECT 
+        a.order_id, a.status, a.subTotal, a.distance, a.delivery_fee, a.total, a.paymentMode, DATE_FORMAT(a.created_at, "%m-%d-%Y") as created_date,
+        b.fname, b.lname,
+        c.merchant_name
+      FROM `customer_orders` a
+      JOIN `dashers` b ON b.id = a.dasher_id
+      JOIN `merchants` c ON c.id = a.merchant_id 
+      WHERE a.status = "Delivered"
+      AND a.created_at BETWEEN DATE("' . $request->start . '") AND DATE("' . $request->end . '")
+    ');
+  }
 }
