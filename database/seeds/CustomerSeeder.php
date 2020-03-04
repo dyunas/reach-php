@@ -22,7 +22,6 @@ class CustomerSeeder extends Seeder
         'lname'          => 'Gonzales',
         'mi'             => 'A',
         'contact_number' => '9001234567',
-        'address'        => 'St. Francis 7, San Antonio, City of Biñan, Laguna, 4024',
         'account_status' => 'active'
       ]
     );
