@@ -11,7 +11,7 @@
 <body>
   <h1>Almost there!</h1>
   <p>
-    <a href="http://reachproject.s3-website.ap-east-1.amazonaws.com//#/validation/{{ $userId }}/{{ $token }}">Click here
+    <a href="http://reachproject.s3-website.ap-east-1.amazonaws.com/#/validation/{{ $userId }}/{{ $token }}">Click here
       to verify and complete your
       registration.</a>
   </p>
