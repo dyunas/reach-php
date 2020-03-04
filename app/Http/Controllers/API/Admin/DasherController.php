@@ -3,8 +3,10 @@
 namespace App\Http\Controllers\API\Admin;
 
 use App\Dasher;
-use App\Http\Controllers\Controller;
+use App\DasherRating;
 use Illuminate\Http\Request;
+use App\Http\Controllers\Controller;
+use App\Http\Resources\RatingCollection as RatingCollection;
 
 class DasherController extends Controller
 {
@@ -48,7 +50,21 @@ class DasherController extends Controller
    */
   public function show($id)
   {
-    //
+    $user = Dasher::find($id);
+    $user->user;
+
+    return $user;
+  }
+
+  /**
+   * Display the specified resource.
+   *
+   * @param  int  $id
+   * @return \Illuminate\Http\Response
+   */
+  public function getDasherRating(Request $request)
+  {
+    return RatingCollection::collection(DasherRating::where('dasher_id', $request->id)->get());
   }
 
   /**

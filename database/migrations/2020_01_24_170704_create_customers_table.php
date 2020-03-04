@@ -20,7 +20,6 @@ class CreateCustomersTable extends Migration
       $table->string('lname', 30);
       $table->string('mi', 2);
       $table->bigInteger('contact_number')->unsigned();
-      $table->text('address');
       $table->string('account_status');
     });
   }

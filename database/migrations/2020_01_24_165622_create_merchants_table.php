@@ -17,9 +17,9 @@ class CreateMerchantsTable extends Migration
       $table->bigIncrements('id');
       $table->bigInteger('user_id')->unsigned();
       $table->string('merchant_name', 50);
-      $table->text('location');
-      $table->double('latitude');
-      $table->double('longitude');
+      $table->text('location')->nullable();
+      $table->double('latitude')->nullable();
+      $table->double('longitude')->nullable();
       $table->bigInteger('contact_num')->unsigned();
       $table->time('opening')->nullable();
       $table->time('closing')->nullable();

@@ -5,6 +5,7 @@ namespace App\Http\Controllers\Auth;
 use App\User;
 use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
+use App\Merchant;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Hash;
 use App\Providers\RouteServiceProvider;
@@ -69,6 +70,10 @@ class LoginController extends Controller
       return response()->json(["message" => "Incorrect password"], 401);
     }
 
+    if (is_null($user->email_verified_at)) {
+      return response()->json(["message" => "Waiting for confirmation"], 401);
+    }
+
     $token = $this->generateAccessToken($user);
 
     switch ($user->account_type) {
@@ -77,6 +82,8 @@ class LoginController extends Controller
         $owner_id = $user->id;
         break;
       case 'merchant':
+        Merchant::where('user_id', $user->id)->update(['status' => 1]);
+
         $owner = $user->merchant->merchant_name;
         $owner_id = $user->merchant->id;
         break;

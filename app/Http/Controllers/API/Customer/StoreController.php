@@ -33,6 +33,7 @@ class StoreController extends Controller
               , 2) as distance
             ')
       ->havingRaw('distance <= 20')
+      ->whereRaw('status = 1')
       ->limit(15)
       ->get();
 

@@ -16,7 +16,6 @@ class RatingCollection extends JsonResource
   {
     return [
       'id'         => $this->id,
-      'dasher'     => $this->dasher,
       'customer'   => $this->customer,
       'order'      => $this->order,
       'rating'     => $this->rating,

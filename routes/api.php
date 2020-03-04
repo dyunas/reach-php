@@ -2,7 +2,6 @@
 
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
-use App\Events\PlacedOrder;
 
 /*
 |--------------------------------------------------------------------------
@@ -20,6 +19,9 @@ Route::middleware('auth:api')->get('/user', function (Request $request) {
 });
 
 Route::post('/login', 'Auth\LoginController@login');
+Route::post('/register', 'Auth\RegisterController@create');
+Route::get('/checkEmail', 'Auth\RegisterController@checkEmail');
+Route::get('/verify_email', 'Auth\RegisterController@verifyRegistration');
 
 Route::middleware('auth:api')->group(function () {
   Route::post('/logout', 'Auth\LogoutController@logout');
@@ -29,7 +31,6 @@ Route::middleware('auth:api')->group(function () {
     'admin/customer'     => 'API\Admin\CustomerController',
     'admin/merchant'     => 'API\Admin\MerchantController',
     'admin/dasher'       => 'API\Admin\DasherController',
-    // 'admin/revenue'      => 'API\Admin\RevenueController',
 
     'dasher'             => 'API\DasherController',
     'dasher_status'      => 'API\Dasher\StatusController',
@@ -51,12 +52,15 @@ Route::middleware('auth:api')->group(function () {
   Route::get('/admin/getMerchantCount', 'API\Admin\MerchantController@merchant_count');
   Route::get('/admin/getDasherCount', 'API\Admin\DasherController@dasher_count');
 
+  Route::get('/admin/getDasherRating', 'API\Admin\DasherController@getDasherRating');
+
   Route::get('/admin/transactions/getAnnualTransactionsCount', 'API\Admin\TransactionController@getAnnualTransactionsCount');
   Route::get('/admin/transactions/getMonthlyTransactionsCount', 'API\Admin\TransactionController@getMonthlyTransactionsCount');
   Route::get('/admin/transactions/getDateRangeTransactions', 'API\Admin\TransactionController@getDateRangeTransactions');
 
   Route::get('/admin/revenue/getAnnualRevenue', 'API\Admin\RevenueController@getAnnualRevenue');
   Route::get('/admin/revenue/getMonthlyRevenue', 'API\Admin\RevenueController@getMonthlyRevenue');
+  Route::get('/admin/revenue/getDateRangeRevenue', 'API\Admin\RevenueController@getDateRangeRevenue');
 
   Route::get('/store_categories', 'API\Merchant\CategoryController@getCategories');
   Route::get('/store_products_by_category', 'API\Merchant\ProductController@getProductByCategories');

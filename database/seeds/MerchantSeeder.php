@@ -25,7 +25,9 @@ class MerchantSeeder extends Seeder
         'longitude'      => '121.0574553',
         'contact_num'    => '88682871',
         'opening'        => '00:00',
-        'closing'        => '00:00'
+        'closing'        => '00:00',
+        'status'         => 0,
+        'account_status' => 'active',
       ],
       [
         'user_id'        => 5,
@@ -36,7 +38,9 @@ class MerchantSeeder extends Seeder
         'longitude'      => '121.0458407',
         'contact_num'    => '9121234567',
         'opening'        => '09:00',
-        'closing'        => '20:00'
+        'closing'        => '20:00',
+        'status'         => 0,
+        'account_status' => 'active',
       ]
     ];
 

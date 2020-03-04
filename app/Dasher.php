@@ -25,7 +25,7 @@ class Dasher extends Model
    */
   public function user()
   {
-    return $this->hasOne(User::class);
+    return $this->hasOne(User::class, 'id', 'user_id');
   }
 
   /**
@@ -33,7 +33,7 @@ class Dasher extends Model
    */
   public function orders()
   {
-    return $this->belongsToMany(CustomerOrder::class);
+    return $this->hasMany(CustomerOrder::class, 'dasher_id', 'id');
   }
 
   /**

@@ -2,12 +2,17 @@
 
 namespace App\Http\Controllers\Auth;
 
-use App\Http\Controllers\Controller;
-use App\Providers\RouteServiceProvider;
+use App\Customer;
+use App\EmailVerification;
 use App\User;
-use Illuminate\Foundation\Auth\RegistersUsers;
+use Illuminate\Http\Request;
+use App\Http\Controllers\Controller;
 use Illuminate\Support\Facades\Hash;
+use App\Providers\RouteServiceProvider;
 use Illuminate\Support\Facades\Validator;
+use Illuminate\Foundation\Auth\RegistersUsers;
+use Illuminate\Support\Facades\Mail;
+use App\Mail\EmailVerificationMailable;
 
 class RegisterController extends Controller
 {
@@ -47,27 +52,69 @@ class RegisterController extends Controller
    * @param  array  $data
    * @return \Illuminate\Contracts\Validation\Validator
    */
-  protected function validator(array $data)
+  protected function validator(Request $request)
   {
-    return Validator::make($data, [
-      'email' => ['required', 'string', 'email', 'max:255', 'unique:users'],
-      'password' => ['required', 'string', 'min:8', 'confirmed'],
-      'account_type' => ['required', 'string']
+    return $request->validate([
+      'email'          => 'required|email',
+      'password'       => 'required|string|confirmed',
+      'fname'          => 'required|string',
+      'lname'          => 'required|string',
+      'contact_number' => 'required|digits'
     ]);
   }
 
   /**
    * Create a new user instance after a valid registration.
    *
-   * @param  array  $data
+   * @param  array  $request
    * @return \App\User
    */
-  protected function create(array $data)
+  public function create(Request $request)
   {
-    return User::create([
-      'name' => $data['name'],
-      'email' => $data['email'],
-      'password' => Hash::make($data['password']),
+    $token = Hash::make($request->email . '-' . now());
+
+    $user = User::create([
+      'email' => $request->email,
+      'password' => Hash::make($request->password),
+      'account_type' => $request->account_type
     ]);
+
+    if ($request->account_type == "customer") {
+      Customer::create([
+        'user_id' => $user->id,
+        'fname' => $request->fname,
+        'lname' => $request->lname,
+        'contact_number' => $request->cnum,
+        'account_status' => 'disabled'
+      ]);
+    }
+
+    EmailVerification::create([
+      'user_id' => $user->id,
+      'token' => $token
+    ]);
+
+    Mail::to($request->email)->send(new EmailVerificationMailable($token, $user->id));
+
+    return response()->json([], 200);
+  }
+
+  public function checkEmail(Request $request)
+  {
+    return User::where('email', $request->email)->get();
+  }
+
+  public function verifyRegistration(Request $request)
+  {
+    $verified = EmailVerification::where('user_id', $request->id)->where('token', $request->token)->get();
+
+    if (count($verified) < 1) {
+      return response()->json(['header' => 'Ooops!', 'message' => 'Invalid verification token!'], 200);
+    }
+
+    User::where('id', $request->id)->update(['email_verified_at' => now()]);
+    Customer::where('user_id', $request->id)->update(['account_status' => 'active']);
+
+    return response()->json(['header' => 'Congratulations!', 'message' => 'You have successfully verified your account!'], 200);
   }
 }
