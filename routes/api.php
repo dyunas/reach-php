@@ -1,5 +1,6 @@
 <?php
 
+use Twilio\Rest\Client;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
 
@@ -74,3 +75,16 @@ Route::middleware('auth:api')->group(function () {
 
   Route::get('/checkPendingDelivery', 'API\Dasher\StatusController@checkPendingDelivery');
 });
+
+// Route::post('/sendsms', function () {
+//   $recipients = '+639161235876';
+
+//   $account_sid = getenv("TWILIO_SID");
+//   $auth_token = getenv("TWILIO_AUTH_TOKEN");
+//   $twilio_number = getenv("TWILIO_NUMBER");
+//   $client = new Client($account_sid, $auth_token);
+//   $client->messages->create(
+//     $recipients,
+//     ['from' => $twilio_number, 'body' => 'Almost there! To activate your account, Go to this link http://reachproject.s3-website.ap-east-1.amazonaws.com/#/validation/9/$2y$10$Zc5JAlNGxgZ1CXZ1zqHpmOf2OV7PaYp68qRH8XzXp9UjD17LbGEHO']
+//   );
+// });

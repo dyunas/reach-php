@@ -2,17 +2,18 @@
 
 namespace App\Http\Controllers\Auth;
 
-use App\Customer;
-use App\EmailVerification;
 use App\User;
+use App\Customer;
+use Twilio\Rest\Client;
+use App\EmailVerification;
 use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
 use Illuminate\Support\Facades\Hash;
 use App\Providers\RouteServiceProvider;
 use Illuminate\Support\Facades\Validator;
 use Illuminate\Foundation\Auth\RegistersUsers;
-use Illuminate\Support\Facades\Mail;
-use App\Mail\EmailVerificationMailable;
+// use Illuminate\Support\Facades\Mail;
+// use App\Mail\EmailVerificationMailable;
 
 class RegisterController extends Controller
 {
@@ -94,7 +95,19 @@ class RegisterController extends Controller
       'token' => $token
     ]);
 
-    Mail::to($request->email)->send(new EmailVerificationMailable($token, $user->id));
+    // Mail::to($request->email)->send(new EmailVerificationMailable($token, $user->id));
+
+    $recipients = '+63' . $request->cnum;
+    $message = 'Almost there! To activate your account, Go to this link http://reachproject.s3-website.ap-east-1.amazonaws.com/#/validation/' . $user->id . '/' . $token;
+
+    $account_sid = getenv("TWILIO_SID");
+    $auth_token = getenv("TWILIO_AUTH_TOKEN");
+    $twilio_number = getenv("TWILIO_NUMBER");
+    $client = new Client($account_sid, $auth_token);
+    $client->messages->create(
+      $recipients,
+      ['from' => $twilio_number, 'body' => $message]
+    );
 
     return response()->json([], 200);
   }
