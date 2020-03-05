@@ -72,7 +72,7 @@ class RegisterController extends Controller
    */
   public function create(Request $request)
   {
-    $token = Hash::make($request->email . '-' . now());
+    $token = sha1($request->email . '-' . now());
 
     $user = User::create([
       'email' => $request->email,
