@@ -74,7 +74,3 @@ Route::middleware('auth:api')->group(function () {
 
   Route::get('/checkPendingDelivery', 'API\Dasher\StatusController@checkPendingDelivery');
 });
-
-Route::get('/hasher', function () {
-  return sha1('password' . '-' . now());
-});
