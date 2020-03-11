@@ -48,7 +48,10 @@ class CustomerController extends Controller
    */
   public function show($id)
   {
-    //
+    $customer = Customer::find($id);
+    $customer->user;
+
+    return $customer;
   }
 
   /**

@@ -18,7 +18,6 @@ class CreateDashersTable extends Migration
       $table->bigInteger('user_id')->unisgned();
       $table->string('fname', 30);
       $table->string('lname', 30);
-      $table->string('mi', 2);
       $table->bigInteger('contact_number')->unsigned();
       $table->string('vehicle_rank', 20);
       $table->string('account_status');

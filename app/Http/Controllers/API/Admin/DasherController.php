@@ -50,10 +50,10 @@ class DasherController extends Controller
    */
   public function show($id)
   {
-    $user = Dasher::find($id);
-    $user->user;
+    $dasher = Dasher::find($id);
+    $dasher->user;
 
-    return $user;
+    return $dasher;
   }
 
   /**

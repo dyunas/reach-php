@@ -74,26 +74,38 @@ class LoginController extends Controller
       return response()->json(["message" => "Waiting for confirmation"], 401);
     }
 
-    $token = $this->generateAccessToken($user);
-
     switch ($user->account_type) {
       case 'admin':
+        $token = $this->generateAccessToken($user);
         $owner = 'admin';
         $owner_id = $user->id;
         break;
       case 'merchant':
-        Merchant::where('user_id', $user->id)->update(['status' => 1]);
+        if ($user->merchant->account_status == 'deactivated') {
+          return response()->json(["message" => "Account is deactivated. Please contact reach suppor team @ reach.dev2019@gmail.com"], 401);
+        }
 
+        $token = $this->generateAccessToken($user);
         $owner = $user->merchant->merchant_name;
         $owner_id = $user->merchant->id;
         break;
 
       case 'customer':
+        if ($user->customer->account_status == 'deactivated') {
+          return response()->json(["message" => "Account is deactivated. Please contact reach suppor team @ reach.dev2019@gmail.com"], 401);
+        }
+
+        $token = $this->generateAccessToken($user);
         $owner = $user->customer->fname . ' ' . $user->customer->lname;
         $owner_id = $user->customer->id;
         break;
 
       case 'dasher':
+        if ($user->dasher->account_status == 'deactivated') {
+          return response()->json(["message" => "Account is deactivated. Please contact reach support team at reach.dev@gmail.com"], 401);
+        }
+
+        $token = $this->generateAccessToken($user);
         $owner = $user->dasher->fname . ' ' . $user->dasher->lname;
         $owner_id = $user->dasher->id;
         break;

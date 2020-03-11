@@ -72,9 +72,6 @@ class SettingController extends Controller
    */
   public function update(Request $request, $id)
   {
-    User::where('id', Auth::user()->id)
-      ->update(['email' => $request->data['email']]);
-
     Merchant::where('id', $id)
       ->update([
         'merchant_name' => $request->data['merchantName'],

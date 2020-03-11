@@ -18,7 +18,6 @@ class CreateCustomersTable extends Migration
       $table->bigInteger('user_id')->unisgned();
       $table->string('fname', 30);
       $table->string('lname', 30);
-      $table->string('mi', 2)->nullable();
       $table->bigInteger('contact_number')->unsigned();
       $table->string('account_status');
     });

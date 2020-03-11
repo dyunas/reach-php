@@ -14,6 +14,7 @@ use Illuminate\Support\Facades\Validator;
 use Illuminate\Foundation\Auth\RegistersUsers;
 use Illuminate\Support\Facades\Mail;
 use App\Mail\EmailVerificationMailable;
+use App\Mail\ResetPassportMailable;
 
 class RegisterController extends Controller
 {
@@ -117,5 +118,37 @@ class RegisterController extends Controller
     Customer::where('user_id', $request->id)->update(['account_status' => 'active']);
 
     return response()->json(['header' => 'Congratulations!', 'message' => 'You have successfully verified your account!'], 200);
+  }
+
+  public function reset_password(Request $request)
+  {
+    $user = User::where('email', $request->email)->first();
+    $pword = uniqid(rand());
+
+    if (empty($user)) {
+      return response()->json([], 200);
+    }
+
+    $user->update([
+      'password' => Hash::make($pword)
+    ]);
+
+    switch ($user->account_type) {
+      case 'merchant':
+        $user_name = $user->merchant->merchant_name;
+        break;
+
+      case 'dasher':
+        $user_name = $user->dasher->fname;
+        break;
+
+      case 'customer':
+        $user_name = $user->customer->fname;
+        break;
+    }
+
+    Mail::to($request->email)->send(new ResetPassportMailable($pword, $user_name));
+
+    return response()->json([], 204);
   }
 }

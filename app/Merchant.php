@@ -25,7 +25,7 @@ class Merchant extends Model
    */
   public function user()
   {
-    return $this->hasOne(User::class);
+    return $this->belongsTo(User::class);
   }
 
   /**
@@ -34,5 +34,10 @@ class Merchant extends Model
   public function orders()
   {
     return $this->hasMany(User::class);
+  }
+
+  public function requirements()
+  {
+    return $this->hasOne(MerchantRequirement::class);
   }
 }

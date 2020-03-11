@@ -20,7 +20,6 @@ class CustomerSeeder extends Seeder
         'user_id'        => 4,
         'fname'          => 'Ariana Lexis',
         'lname'          => 'Gonzales',
-        'mi'             => 'A',
         'contact_number' => '9001234567',
         'account_status' => 'active'
       ]

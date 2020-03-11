@@ -1,5 +1,6 @@
 <?php
 
+use App\MerchantRequirement;
 use Illuminate\Database\Seeder;
 
 class DatabaseSeeder extends Seeder
@@ -16,7 +17,7 @@ class DatabaseSeeder extends Seeder
     $this->call(CustomerSeeder::class);
     $this->call(DasherSeeder::class);
     $this->call(ProductCategorySeeder::class);
-    $this->call(MerchantProductSeeder::class);
     $this->call(OrderStatusSeeder::class);
+    $this->call(MerchantRequirementSeeder::class);
   }
 }

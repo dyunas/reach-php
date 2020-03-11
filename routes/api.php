@@ -22,6 +22,7 @@ Route::post('/login', 'Auth\LoginController@login');
 Route::post('/register', 'Auth\RegisterController@create');
 Route::get('/checkEmail', 'Auth\RegisterController@checkEmail');
 Route::get('/verify_email', 'Auth\RegisterController@verifyRegistration');
+Route::post('/reset_password', 'Auth\RegisterController@reset_password');
 
 Route::middleware('auth:api')->group(function () {
   Route::post('/logout', 'Auth\LogoutController@logout');
@@ -48,6 +49,8 @@ Route::middleware('auth:api')->group(function () {
     'customer_orders'    => 'API\Customer\OrderController',
   ]);
 
+  Route::patch('/admin/update_account_status/{id}', 'API\Admin\MerchantController@update_account_status');
+
   Route::get('/admin/getCustomerCount', 'API\Admin\CustomerController@customer_count');
   Route::get('/admin/getMerchantCount', 'API\Admin\MerchantController@merchant_count');
   Route::get('/admin/getDasherCount', 'API\Admin\DasherController@dasher_count');
@@ -73,4 +76,6 @@ Route::middleware('auth:api')->group(function () {
   Route::post('/orders/order_opened', 'API\Merchant\CustomerOrderController@order_opened');
 
   Route::get('/checkPendingDelivery', 'API\Dasher\StatusController@checkPendingDelivery');
+
+  Route::patch('/customer_changepassword', 'API\CustomerController@changePassword');
 });

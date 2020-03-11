@@ -20,7 +20,6 @@ class DasherSeeder extends Seeder
         'user_id'        => 3,
         'fname'          => 'Gerick',
         'lname'          => 'Adubal',
-        'mi'             => '',
         'contact_number' => '9001234567',
         'vehicle_rank'   => 'rider',
         'account_status' => 'active'
@@ -29,7 +28,6 @@ class DasherSeeder extends Seeder
         'user_id'        => 6,
         'fname'          => 'Argie',
         'lname'          => 'Cabrales',
-        'mi'             => '',
         'contact_number' => '9989876543',
         'vehicle_rank'   => 'rider',
         'account_status' => 'active'
