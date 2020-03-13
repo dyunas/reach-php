@@ -60,10 +60,10 @@ class MerchantController extends Controller
 
       MerchantRequirement::create([
         'merchant_id' => $merchant->id,
-        'dtiSec' => $request->brgyClearance,
-        'leaseTitle' => $request->busPerm,
-        'busPerm' => $request->dtiSec,
-        'brgyClearance' => $request->leaseTitle
+        'dtiSec' => $request->dtiSec,
+        'leaseTitle' => $request->leaseTitle,
+        'busPerm' => $request->busPerm,
+        'brgyClearance' => $request->brgyClearance
       ]);
 
       return response()->json(['message' => 'Merchant created succesfully'], 201);

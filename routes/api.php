@@ -49,7 +49,8 @@ Route::middleware('auth:api')->group(function () {
     'customer_orders'    => 'API\Customer\OrderController',
   ]);
 
-  Route::patch('/admin/update_account_status/{id}', 'API\Admin\MerchantController@update_account_status');
+  Route::patch('/admin/update_merchant_account_status/{id}', 'API\Admin\MerchantController@update_account_status');
+  Route::patch('/admin/update_dasher_account_status/{id}', 'API\Admin\DasherController@update_account_status');
 
   Route::get('/admin/getCustomerCount', 'API\Admin\CustomerController@customer_count');
   Route::get('/admin/getMerchantCount', 'API\Admin\MerchantController@merchant_count');
@@ -78,4 +79,7 @@ Route::middleware('auth:api')->group(function () {
   Route::get('/checkPendingDelivery', 'API\Dasher\StatusController@checkPendingDelivery');
 
   Route::patch('/customer_changepassword', 'API\CustomerController@changePassword');
+
+  Route::patch('/merchant_changepassword', 'API\Merchant\SettingController@changePassword');
+  Route::patch('/merchant_update_status', 'API\Merchant\SettingController@merchant_update_status');
 });

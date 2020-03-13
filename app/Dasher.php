@@ -43,4 +43,9 @@ class Dasher extends Model
   {
     return $this->hasMany(DasherRating::class);
   }
+
+  public function requirements()
+  {
+    return $this->hasOne(DasherRequirement::class);
+  }
 }

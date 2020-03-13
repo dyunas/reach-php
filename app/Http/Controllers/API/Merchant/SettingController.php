@@ -7,6 +7,7 @@ use App\Merchant;
 use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Hash;
 
 class SettingController extends Controller
 {
@@ -74,7 +75,6 @@ class SettingController extends Controller
   {
     Merchant::where('id', $id)
       ->update([
-        'merchant_name' => $request->data['merchantName'],
         'location' => $request->data['location'],
         'latitude' => $request->data['lat'],
         'longitude' => $request->data['long'],
@@ -87,6 +87,34 @@ class SettingController extends Controller
     $user->merchant;
 
     return $user;
+  }
+
+  public function changePassword(Request $request)
+  {
+    $user = Auth::user();
+
+    if (!Hash::check($request->data['old_pword'], $user->password)) {
+      return response()->json(['message' => 'The given old password is invalid. Try again'], 400);
+    }
+
+    $user->update([
+      'password' => Hash::make($request->data['new_pword'])
+    ]);
+
+    return response()->json(['message' => 'Password changed successfully!'], 200);
+  }
+
+  public function merchant_update_status(Request $request)
+  {
+    try {
+      $merchant = Merchant::where('user_id', Auth::user()->merchant->user_id)->update([
+        'status' => $request->data['status']
+      ]);
+
+      return $merchant;
+    } catch (\Throwable $error) {
+      return response()->json(['message' => 'Somewhint went wrong while updating status. Please try again', 'error' => $error], 500);
+    }
   }
 
   /**
