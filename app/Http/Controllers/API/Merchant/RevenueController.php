@@ -11,9 +11,9 @@ class RevenueController extends Controller
 	public function getDailyRevenue()
 	{
 		return DB::select('
-            SELECT ((SUM(subTotal) * 0.05) + SUM(1.75)) as totalRevenue
+            SELECT SUM(subTotal) as totalRevenue
             FROM customer_orders
-						WHERE created_at = DATE_FORMAT(NOW() ,"%Y-01-01")
+						WHERE created_at = NOW()
 						AND merchant_id = ' . Auth::user()->merchant->id . '
             AND status = "delivered"
          ');
@@ -22,7 +22,7 @@ class RevenueController extends Controller
 	public function getMonthlyRevenue()
 	{
 		return DB::select('
-            SELECT ((SUM(subTotal) * 0.05) + SUM(1.75)) as totalRevenue
+            SELECT SUM(subTotal) as totalRevenue
             FROM customer_orders
 						WHERE created_at >= DATE_SUB(LAST_DAY(NOW()),INTERVAL DAY(LAST_DAY(NOW())) - 1 DAY) AND created_at <= LAST_DAY(CURDATE())
 						AND merchant_id = ' . Auth::user()->merchant->id . '
