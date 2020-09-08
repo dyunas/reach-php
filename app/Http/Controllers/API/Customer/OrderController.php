@@ -58,9 +58,9 @@ class OrderController extends Controller
 			return response()->json(['header' => 'Oh no!', 'message' => 'There is no available rider at this moment. Pleast try again later!', 'ok' => false], 201);
 		}
 
-		DasherStatus::where('dasher_id', $rider[0]->id)->update(['dasher_status' => 0]);
+		DasherStatus::where('dasher_id', $rider[0]->dasher_id)->update(['dasher_status' => 0]);
 
-		$order_details = $this->store_order($request, $rider[0]->id);
+		$order_details = $this->store_order($request, $rider[0]->dasher_id);
 		$order_item = $this->store_order_items($request->cart, $order_details->id);
 
 		$notify = new \stdclass;
