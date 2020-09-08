@@ -66,6 +66,9 @@ Route::middleware('auth:api')->group(function () {
 	Route::get('/admin/revenue/getMonthlyRevenue', 'API\Admin\RevenueController@getMonthlyRevenue');
 	Route::get('/admin/revenue/getDateRangeRevenue', 'API\Admin\RevenueController@getDateRangeRevenue');
 
+	Route::get('/merchant/revenue/getDailRevenue', 'API\Merchant\RevenueController@getDailRevenue');
+	Route::get('/merchant/revenue/getMonthlyRevenue', 'API\Merchant\RevenueController@getMonthlyRevenue');
+
 	Route::get('/store_categories', 'API\Merchant\CategoryController@getCategories');
 	Route::get('/store_products_by_category', 'API\Merchant\ProductController@getProductByCategories');
 	Route::get('/store_getBanner', 'API\Merchant\ProductController@getBanner');

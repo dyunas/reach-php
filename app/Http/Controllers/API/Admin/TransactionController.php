@@ -8,30 +8,30 @@ use App\Http\Controllers\Controller;
 
 class TransactionController extends Controller
 {
-  public function getAnnualTransactionsCount()
-  {
-    return DB::select('
+	public function getAnnualTransactionsCount()
+	{
+		return DB::select('
       SELECT COUNT(*) as annualTransaction
       FROM `customer_orders`
       WHERE status = "Delivered" AND
-      created_at BETWEEN DATE_FORMAT(NOW() ,"%Y-01-01") AND DATE_FORMAT(NOW() ,"%Y-12-31")
+      created_at >= DATE_FORMAT(NOW() ,"%Y-01-01") AND created_at <= DATE_FORMAT(NOW() ,"%Y-12-31")
     ');
-  }
+	}
 
-  public function getMonthlyTransactionsCount()
-  {
-    return DB::select('
+	public function getMonthlyTransactionsCount()
+	{
+		return DB::select('
       SELECT COUNT(*) as monthlyTransaction
       FROM `customer_orders`
       WHERE status = "Delivered" AND
-      created_at BETWEEN DATE_SUB(LAST_DAY(NOW()),INTERVAL DAY(LAST_DAY(NOW()))-
-      1 DAY) AND LAST_DAY(CURDATE())
+      created_at >= DATE_SUB(LAST_DAY(NOW()),INTERVAL DAY(LAST_DAY(NOW()))-
+      1 DAY) AND created_at <= LAST_DAY(CURDATE())
     ');
-  }
+	}
 
-  public function getDateRangeTransactions(Request $request)
-  {
-    return DB::select('
+	public function getDateRangeTransactions(Request $request)
+	{
+		return DB::select('
       SELECT 
         a.order_id, a.status, a.subTotal, a.distance, a.delivery_fee, a.total, a.paymentMode, DATE_FORMAT(a.created_at, "%m-%d-%Y") as created_date,
         b.fname, b.lname,
@@ -40,7 +40,7 @@ class TransactionController extends Controller
       JOIN `dashers` b ON b.id = a.dasher_id
       JOIN `merchants` c ON c.id = a.merchant_id 
       WHERE a.status = "Delivered"
-      AND a.created_at BETWEEN DATE("' . $request->start . '") AND DATE("' . $request->end . '")
+      AND a.created_at >= DATE("' . $request->start . '") AND a.created_at <= DATE("' . $request->end . '")
     ');
-  }
+	}
 }
